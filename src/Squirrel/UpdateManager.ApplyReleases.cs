@@ -81,7 +81,7 @@ namespace Squirrel
 
                     await cleanDeadVersions(currentVersion, newVersion);
                 } catch (Exception ex) {
-                    this.Log().WarnException("Failed to clean dead versions, continuing anyways", ex);
+                    this.Log().Warn(ex, "Failed to clean dead versions, continuing anyways");
                 }
                 progress(100);
 
@@ -114,7 +114,7 @@ namespace Squirrel
                                     try {
                                         await Utility.InvokeProcessAsync(exe, String.Format("--squirrel-uninstall {0}", version), cts.Token);
                                     } catch (Exception ex) {
-                                        this.Log().ErrorException("Failed to run cleanup hook, continuing: " + exe, ex);
+                                        this.Log().Error(ex, "Failed to run cleanup hook, continuing: " + exe);
                                     }
                                 }
                             }, 1 /*at a time*/);
@@ -122,7 +122,7 @@ namespace Squirrel
                             allApps.ForEach(x => RemoveShortcutsForExecutable(x.Name, ShortcutLocation.StartMenu | ShortcutLocation.Desktop));
                         }
                     } catch (Exception ex) {
-                        this.Log().WarnException("Failed to run pre-uninstall hooks, uninstalling anyways", ex);
+                        this.Log().Warn(ex, "Failed to run pre-uninstall hooks, uninstalling anyways");
                     }
                 }
 
@@ -386,7 +386,7 @@ namespace Squirrel
                         try {
                             await Utility.InvokeProcessAsync(exe, args, cts.Token);
                         } catch (Exception ex) {
-                            this.Log().ErrorException("Couldn't run Squirrel hook, continuing: " + exe, ex);
+                            this.Log().Error(ex, "Couldn't run Squirrel hook, continuing: " + exe);
                         }
                     }
                 }, 1 /* at a time */);
@@ -440,7 +440,7 @@ namespace Squirrel
                         return new ShellLink(file.FullName);
                     } catch (Exception ex) {
                         var message = String.Format("File '{0}' could not be converted into a valid ShellLink", file.FullName);
-                        this.Log().WarnException(message, ex);
+                        this.Log().Warn(ex, message);
                         return null;
                     }
                 });
@@ -461,7 +461,7 @@ namespace Squirrel
 
                     } catch (Exception ex) {
                         var message = String.Format("fixPinnedExecutables: shortcut failed: {0}", shortcut.Target);
-                        this.Log().ErrorException(message, ex);
+                        this.Log().Error(ex, message);
                     }
                 }
             }
@@ -521,7 +521,7 @@ namespace Squirrel
                             this.Log().LogIfThrows(LogLevel.Warn, "Failed to delete key: " + x,
                                 () => regKey.DeleteValue(x)));
                     } catch (Exception e) {
-                        this.Log().WarnException("Couldn't rewrite shim RegKey, most likely no apps are shimmed", e);
+                        this.Log().Warn(e, "Couldn't rewrite shim RegKey, most likely no apps are shimmed");
                     } finally {
                         if (regKey != null) regKey.Dispose();
                         if (baseKey != null) baseKey.Dispose();
@@ -580,7 +580,7 @@ namespace Squirrel
                                     try {
                                         await Utility.InvokeProcessAsync(exe, args, cts.Token);
                                     } catch (Exception ex) {
-                                        this.Log().ErrorException("Coudln't run Squirrel hook, continuing: " + exe, ex);
+                                        this.Log().Error(ex, "Coudln't run Squirrel hook, continuing: " + exe);
                                     }
                                 }
                             }, 1 /* at a time */);
@@ -611,7 +611,7 @@ namespace Squirrel
                             markAppFolderAsDead(x.FullName);
                         }
                     } catch (UnauthorizedAccessException ex) {
-                        this.Log().WarnException("Couldn't delete directory: " + x.FullName, ex);
+                        this.Log().Warn(ex, "Couldn't delete directory: " + x.FullName);
 
                         // NB: Same deal as above
                         markAppFolderAsDead(x.FullName);

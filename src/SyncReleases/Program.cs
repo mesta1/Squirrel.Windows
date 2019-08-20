@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -119,6 +120,21 @@ namespace SyncReleases
         public void Dispose()
         {
             lock(gate) inner.Dispose();
+        }
+
+        public void Write(Exception exception, [Localizable(false)] string message, LogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write([Localizable(false)] string message, [Localizable(false)] Type type, LogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write(Exception exception, [Localizable(false)] string message, [Localizable(false)] Type type, LogLevel logLevel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

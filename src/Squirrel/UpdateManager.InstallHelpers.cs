@@ -69,7 +69,7 @@ namespace Squirrel
                             }
                         }
                     } catch(Exception ex) {
-                        this.Log().InfoException("Couldn't write uninstall icon, don't care", ex);
+                        this.Log().Info(ex, "Couldn't write uninstall icon, don't care");
                     } finally {
                         File.Delete(targetPng);
                     }

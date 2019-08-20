@@ -216,7 +216,7 @@ namespace Squirrel
                     File.WriteAllText(targetFile.FullName + ".diff", "1");
                 }
             } catch (Exception ex) {
-                this.Log().WarnException(String.Format("We really couldn't create a delta for {0}", targetFile.Name), ex);
+                this.Log().Warn(ex, String.Format("We really couldn't create a delta for {0}", targetFile.Name));
 
                 Utility.DeleteFileHarder(targetFile.FullName + ".bsdiff", true);
                 Utility.DeleteFileHarder(targetFile.FullName + ".diff", true);

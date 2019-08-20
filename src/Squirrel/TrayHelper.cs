@@ -126,7 +126,7 @@ namespace Squirrel
                         Array.Copy(iconStreamData, offset, newItem, 0, newItem.Length);
                         toKeep.Add(newItem);
                     } catch (Exception ex) {
-                        this.Log().ErrorException("Failed to parse IconStreams regkey", ex);
+                        this.Log().Error(ex, "Failed to parse IconStreams regkey");
                         return;
                     }
                 }

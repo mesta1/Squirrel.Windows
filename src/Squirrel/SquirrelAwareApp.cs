@@ -70,7 +70,7 @@ namespace Squirrel
                 lookup[args[0]](version);
                 if (!ModeDetector.InUnitTestRunner()) Environment.Exit(0);
             } catch (Exception ex) {
-                LogHost.Default.ErrorException("Failed to handle Squirrel events", ex);
+                LogHost.Default.Error(ex, "Failed to handle Squirrel events");
                 if (!ModeDetector.InUnitTestRunner()) Environment.Exit(-1);
             }
         }

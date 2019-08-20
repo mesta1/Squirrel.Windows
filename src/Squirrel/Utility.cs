@@ -337,7 +337,7 @@ namespace Squirrel
                 Directory.Delete(directoryPath, false);
             } catch (Exception ex) {
                 var message = String.Format("DeleteDirectory: could not delete - {0}", directoryPath);
-                Log().ErrorException(message, ex);
+                Log().Error(ex, message);
             }
         }
 
@@ -507,7 +507,7 @@ namespace Squirrel
             } catch (Exception ex) {
                 if (ignoreIfFails) return;
 
-                LogHost.Default.ErrorException("Really couldn't delete file: " + path, ex);
+                LogHost.Default.Error(ex, "Really couldn't delete file: " + path);
                 throw;
             }
         }
@@ -576,16 +576,16 @@ namespace Squirrel
             } catch (Exception ex) {
                 switch (level) {
                 case LogLevel.Debug:
-                    This.DebugException(message ?? "", ex);
+                    This.Debug(ex, message ?? "");
                     break;
                 case LogLevel.Info:
-                    This.InfoException(message ?? "", ex);
+                    This.Info(ex, message ?? "");
                     break;
                 case LogLevel.Warn:
-                    This.WarnException(message ?? "", ex);
+                    This.Warn(ex, message ?? "");
                     break;
                 case LogLevel.Error:
-                    This.ErrorException(message ?? "", ex);
+                    This.Error(ex, message ?? "");
                     break;
                 }
 
@@ -600,17 +600,17 @@ namespace Squirrel
             } catch (Exception ex) {
                 switch (level) {
                 case LogLevel.Debug:
-                    This.DebugException(message ?? "", ex);
-                    break;
+                    This.Debug(ex, message ?? "");
+                        break;
                 case LogLevel.Info:
-                    This.InfoException(message ?? "", ex);
-                    break;
+                    This.Info(ex, message ?? "");
+                        break;
                 case LogLevel.Warn:
-                    This.WarnException(message ?? "", ex);
-                    break;
+                    This.Warn(ex, message ?? "");
+                        break;
                 case LogLevel.Error:
-                    This.ErrorException(message ?? "", ex);
-                    break;
+                    This.Error(ex, message ?? "");
+                        break;
                 }
                 throw;
             }
@@ -623,17 +623,17 @@ namespace Squirrel
             } catch (Exception ex) {
                 switch (level) {
                 case LogLevel.Debug:
-                    This.DebugException(message ?? "", ex);
-                    break;
+                    This.Debug(ex, message ?? "");
+                        break;
                 case LogLevel.Info:
-                    This.InfoException(message ?? "", ex);
-                    break;
+                    This.Info(ex, message ?? "");
+                        break;
                 case LogLevel.Warn:
-                    This.WarnException(message ?? "", ex);
-                    break;
+                    This.Warn(ex, message ?? "");
+                        break;
                 case LogLevel.Error:
-                    This.ErrorException(message ?? "", ex);
-                    break;
+                    This.Error(ex, message ?? "");
+                        break;
                 }
                 throw;
             }
@@ -673,7 +673,7 @@ namespace Squirrel
         static IFullLogger Log()
         {
             return logger ??
-                (logger = Locator.CurrentMutable.GetService<ILogManager>().GetLogger(typeof(Utility)));
+                (logger = Locator.Current.GetService<ILogManager>().GetLogger(typeof(Utility)));
         }
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
@@ -831,7 +831,7 @@ namespace Squirrel
                     fh.Write(new byte[] { 0xba, 0xad, 0xf0, 0x0d, }, 0, 4);
                     break;
                 } catch (Exception ex) {
-                    this.Log().WarnException("Failed to grab lockfile, will retry: " + path, ex);
+                    this.Log().Warn(ex, "Failed to grab lockfile, will retry: " + path);
                     Thread.Sleep(250);
                 }
             }

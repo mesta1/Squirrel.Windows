@@ -14,6 +14,7 @@ using Splat;
 using Squirrel.Json;
 using NuGet;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace Squirrel.Update
 {
@@ -896,6 +897,24 @@ namespace Squirrel.Update
                 inner.Flush();
                 inner.Dispose();
             }
+        }
+
+        public void Write(Exception exception, [Localizable(false)] string message, LogLevel logLevel)
+        {
+            // TODO: 
+            Write(message, logLevel);
+        }
+
+        public void Write([Localizable(false)] string message, [Localizable(false)] Type type, LogLevel logLevel)
+        {
+            // TODO: 
+            Write(message, logLevel);
+        }
+
+        public void Write(Exception exception, [Localizable(false)] string message, [Localizable(false)] Type type, LogLevel logLevel)
+        {
+            // TODO: 
+            Write(message, logLevel);
         }
     }
 }
