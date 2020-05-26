@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Splat;
+using Squirrel.SimpleSplat;
 using DeltaCompressionDotNet.MsDelta;
 using System.ComponentModel;
 using Squirrel.Bsdiff;
@@ -216,7 +216,7 @@ namespace Squirrel
                     File.WriteAllText(targetFile.FullName + ".diff", "1");
                 }
             } catch (Exception ex) {
-                this.Log().Warn(ex, String.Format("We really couldn't create a delta for {0}", targetFile.Name));
+                this.Log().WarnException(String.Format("We really couldn't create a delta for {0}", targetFile.Name), ex);
 
                 Utility.DeleteFileHarder(targetFile.FullName + ".bsdiff", true);
                 Utility.DeleteFileHarder(targetFile.FullName + ".diff", true);

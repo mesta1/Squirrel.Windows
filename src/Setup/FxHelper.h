@@ -13,10 +13,9 @@ private:
 	static HRESULT HandleRebootRequirement(bool isQuiet);
 	static bool WriteRunOnceEntry();
 	static bool RebootSystem();
-	static int GetDotNetVersionReleaseNumber(NetVersion version);
+	static UINT GetDotNetVersionReleaseNumber(NetVersion version);
 	static UINT GetInstallerUrlForVersion(NetVersion version);
 	static UINT GetInstallerMainInstructionForVersion(NetVersion version);
 	static UINT GetInstallerContentForVersion(NetVersion version);
 	static UINT GetInstallerExpandedInfoForVersion(NetVersion version);
 };
-

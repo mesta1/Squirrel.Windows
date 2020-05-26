@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Splat;
+using Squirrel.SimpleSplat;
 
 namespace Squirrel
 {
@@ -21,6 +21,7 @@ namespace Squirrel
             }
 
             public async Task<UpdateInfo> CheckForUpdate(
+                UpdaterIntention intention,
                 string localReleaseFile,
                 string updateUrlOrPath,
                 bool ignoreDeltaUpdates = false,
@@ -30,15 +31,19 @@ namespace Squirrel
                 progress = progress ?? (_ => { });
 
                 var localReleases = Enumerable.Empty<ReleaseEntry>();
-                var stagingId = getOrCreateStagedUserId();
+                var stagingId = intention == UpdaterIntention.Install ? null : getOrCreateStagedUserId();
 
-                bool shouldInitialize = false;
-                try {
-                    localReleases = Utility.LoadLocalReleases(localReleaseFile);
-                } catch (Exception ex) {
-                    // Something has gone pear-shaped, let's start from scratch
-                    this.Log().Warn(ex, "Failed to load local releases, starting from scratch");
-                    shouldInitialize = true;
+                bool shouldInitialize = intention == UpdaterIntention.Install;
+
+                if (intention != UpdaterIntention.Install) {
+                    try {
+                        localReleases = Utility.LoadLocalReleases(localReleaseFile);
+                    }
+                    catch (Exception ex) {
+                        // Something has gone pear-shaped, let's start from scratch
+                        this.Log().WarnException("Failed to load local releases, starting from scratch", ex);
+                        shouldInitialize = true;
+                    }
                 }
 
                 if (shouldInitialize) await initializeClientAppDirectory();
@@ -76,7 +81,7 @@ namespace Squirrel
                         var data = await urlDownloader.DownloadUrl(uri.ToString());
                         releaseFile = Encoding.UTF8.GetString(data);
                     } catch (WebException ex) {
-                        this.Log().Info(ex, "Download resulted in WebException (returning blank release list)");
+                        this.Log().InfoException("Download resulted in WebException (returning blank release list)", ex);
 
                         if (retries <= 0) throw;
                         retries--;
@@ -125,7 +130,7 @@ namespace Squirrel
                     throw new Exception("Remote release File is empty or corrupted");
                 }
 
-                ret = determineUpdateInfo(localReleases, remoteReleases, ignoreDeltaUpdates);
+                ret = determineUpdateInfo(intention, localReleases, remoteReleases, ignoreDeltaUpdates);
 
                 progress(100);
                 return ret;
@@ -142,7 +147,7 @@ namespace Squirrel
                 Directory.CreateDirectory(pkgDir);
             }
 
-            UpdateInfo determineUpdateInfo(IEnumerable<ReleaseEntry> localReleases, IEnumerable<ReleaseEntry> remoteReleases, bool ignoreDeltaUpdates)
+            UpdateInfo determineUpdateInfo(UpdaterIntention intention, IEnumerable<ReleaseEntry> localReleases, IEnumerable<ReleaseEntry> remoteReleases, bool ignoreDeltaUpdates)
             {
                 var packageDirectory = Utility.PackageDirectoryForAppDir(rootAppDirectory);
                 localReleases = localReleases ?? Enumerable.Empty<ReleaseEntry>();
@@ -167,7 +172,12 @@ namespace Squirrel
                 }
 
                 if (!localReleases.Any()) {
-                    this.Log().Warn("First run or local directory is corrupt, starting from scratch");
+                    if (intention == UpdaterIntention.Install) {
+                        this.Log().Info("First run, starting from scratch");
+                    } else {
+                        this.Log().Warn("No local releases found, starting from scratch");
+                    }
+
                     return UpdateInfo.Create(null, new[] {latestFullRelease}, packageDirectory);
                 }
 
@@ -192,7 +202,7 @@ namespace Squirrel
                     this.Log().Info("Using existing staging user ID: {0}", ret.ToString());
                     return ret;
                 } catch (Exception ex) {
-                    this.Log().Debug(ex, "Couldn't read staging user ID, creating a blank one");
+                    this.Log().DebugException("Couldn't read staging user ID, creating a blank one", ex);
                 }
 
                 var prng = new Random();
@@ -205,7 +215,7 @@ namespace Squirrel
                     this.Log().Info("Generated new staging user ID: {0}", ret.ToString());
                     return ret;
                 } catch (Exception ex) {
-                    this.Log().Warn(ex, "Couldn't write out staging user ID, this user probably shouldn't get beta anything");
+                    this.Log().WarnException("Couldn't write out staging user ID, this user probably shouldn't get beta anything", ex);
                     return null;
                 }
             }

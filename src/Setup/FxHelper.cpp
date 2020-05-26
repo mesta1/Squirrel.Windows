@@ -16,7 +16,7 @@ static const int fx472ReleaseVersion = 461808; // Minimum version for .NET 4.7.2
 
 // According to https://msdn.microsoft.com/en-us/library/8z6watww%28v=vs.110%29.aspx,
 // to install .NET 4.5 we must be Vista SP2+, Windows 7 SP1+, or later.
-// However Paul thinks this is just for customer support, anything >= Vista will generally work.
+// However Anaïs thinks this is just for customer support, anything >= Vista will generally work.
 bool CFxHelper::CanInstallDotNet4_5()
 {
 	return IsWindowsVistaOrGreater();
@@ -56,7 +56,7 @@ bool CFxHelper::IsDotNetInstalled(NetVersion required)
 	return true;
 }
 
-int CFxHelper::GetDotNetVersionReleaseNumber(NetVersion version)
+UINT CFxHelper::GetDotNetVersionReleaseNumber(NetVersion version)
 {
 	switch (version) {
 	case NetVersion::net451:
@@ -369,7 +369,7 @@ HRESULT CFxHelper::HandleRebootRequirement(bool isQuiet)
 }
 
 //
-// Write a runonce entry to the registry to tell it to continue with 
+// Write a runonce entry to the registry to tell it to continue with
 // setup after a reboot
 //
 bool CFxHelper::WriteRunOnceEntry()
@@ -415,4 +415,3 @@ bool CFxHelper::RebootSystem()
 	// Now we have that privilege, we can ask Windows to restart
 	return ExitWindowsEx(EWX_REBOOT, 0) != 0;
 }
-

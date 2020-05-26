@@ -47,8 +47,8 @@ The **[Getting Started Guide](getting-started/0-overview.md)** provides a step-b
   * [GitHub](using/github.md) - overview of using GitHub for installing, distributing, and updating.
 * **Updating** - documentation related to updating an existing install via the `UpdateManager`.
   * [Update Process](using/update-process.md) - overview of the steps in the update process.
-  * [Update Manager](using/update-manager.md) - reference guide for the `UpdateManager`.  
-  * [GitHub](using/github.md) - overview of using GitHub for installing, distributing, and updating.  
+  * [Update Manager](using/update-manager.md) - reference guide for the `UpdateManager`.
+  * [GitHub](using/github.md) - overview of using GitHub for installing, distributing, and updating.
   * [Debugging Updates](using/debugging-updates.md) - tips for debugging Squirrel.Windows updates.
   * [Staged Rollouts](using/staged-rollouts.md) - how to use staged rollouts to ramp up install distribution over time
 
@@ -60,3 +60,4 @@ Why not give back and help make Squirrel even better by contributing to the proj
 * [Contributing](contributing/contributing.md) - overview of ways you can become more involved with Squirrel.Windows.
 * [Building Squirrel](contributing/building-squirrel.md) - steps to build squirrel for the impatient.
 * [VS Solution Overview](contributing/vs-solution-overview.md) - overview of the various projects in the Squirrel.Windows Visual Studio solution.
+* [Branching Strategy](contributing/branching-strategy.md) - overview of the different branches used in squirrel development.

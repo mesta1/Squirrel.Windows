@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NuGet;
-using Splat;
+using Squirrel.SimpleSplat;
 using System.Threading;
 using Squirrel.Shell;
 using Microsoft.Win32;
@@ -81,7 +81,7 @@ namespace Squirrel
 
                     await cleanDeadVersions(currentVersion, newVersion);
                 } catch (Exception ex) {
-                    this.Log().Warn(ex, "Failed to clean dead versions, continuing anyways");
+                    this.Log().WarnException("Failed to clean dead versions, continuing anyways", ex);
                 }
                 progress(100);
 
@@ -114,7 +114,7 @@ namespace Squirrel
                                     try {
                                         await Utility.InvokeProcessAsync(exe, String.Format("--squirrel-uninstall {0}", version), cts.Token);
                                     } catch (Exception ex) {
-                                        this.Log().Error(ex, "Failed to run cleanup hook, continuing: " + exe);
+                                        this.Log().ErrorException("Failed to run cleanup hook, continuing: " + exe, ex);
                                     }
                                 }
                             }, 1 /*at a time*/);
@@ -122,7 +122,7 @@ namespace Squirrel
                             allApps.ForEach(x => RemoveShortcutsForExecutable(x.Name, ShortcutLocation.StartMenu | ShortcutLocation.Desktop));
                         }
                     } catch (Exception ex) {
-                        this.Log().Warn(ex, "Failed to run pre-uninstall hooks, uninstalling anyways");
+                        this.Log().WarnException("Failed to run pre-uninstall hooks, uninstalling anyways", ex);
                     }
                 }
 
@@ -386,7 +386,7 @@ namespace Squirrel
                         try {
                             await Utility.InvokeProcessAsync(exe, args, cts.Token);
                         } catch (Exception ex) {
-                            this.Log().Error(ex, "Couldn't run Squirrel hook, continuing: " + exe);
+                            this.Log().ErrorException("Couldn't run Squirrel hook, continuing: " + exe, ex);
                         }
                     }
                 }, 1 /* at a time */);
@@ -440,7 +440,7 @@ namespace Squirrel
                         return new ShellLink(file.FullName);
                     } catch (Exception ex) {
                         var message = String.Format("File '{0}' could not be converted into a valid ShellLink", file.FullName);
-                        this.Log().Warn(ex, message);
+                        this.Log().WarnException(message, ex);
                         return null;
                     }
                 });
@@ -461,7 +461,7 @@ namespace Squirrel
 
                     } catch (Exception ex) {
                         var message = String.Format("fixPinnedExecutables: shortcut failed: {0}", shortcut.Target);
-                        this.Log().Error(ex, message);
+                        this.Log().ErrorException(message, ex);
                     }
                 }
             }
@@ -521,7 +521,7 @@ namespace Squirrel
                             this.Log().LogIfThrows(LogLevel.Warn, "Failed to delete key: " + x,
                                 () => regKey.DeleteValue(x)));
                     } catch (Exception e) {
-                        this.Log().Warn(e, "Couldn't rewrite shim RegKey, most likely no apps are shimmed");
+                        this.Log().WarnException("Couldn't rewrite shim RegKey, most likely no apps are shimmed", e);
                     } finally {
                         if (regKey != null) regKey.Dispose();
                         if (baseKey != null) baseKey.Dispose();
@@ -536,25 +536,25 @@ namespace Squirrel
             // directory are "dead" (i.e. already uninstalled, but not deleted), and
             // we blow them away. This is to make sure that we don't attempt to run
             // an uninstaller on an already-uninstalled version.
-            async Task cleanDeadVersions(SemanticVersion originalVersion, SemanticVersion currentVersion, bool forceUninstall = false)
+            async Task cleanDeadVersions(SemanticVersion currentVersion, SemanticVersion newVersion, bool forceUninstall = false)
             {
-                if (currentVersion == null) return;
+                if (newVersion == null) return;
 
                 var di = new DirectoryInfo(rootAppDirectory);
                 if (!di.Exists) return;
 
-                this.Log().Info("cleanDeadVersions: for version {0}", currentVersion);
-
-                string originalVersionFolder = null;
-                if (originalVersion != null) {
-                    originalVersionFolder = getDirectoryForRelease(originalVersion).Name;
-                    this.Log().Info("cleanDeadVersions: exclude folder {0}", originalVersionFolder);
-                }
+                this.Log().Info("cleanDeadVersions: checking for version {0}", newVersion);
 
                 string currentVersionFolder = null;
                 if (currentVersion != null) {
                     currentVersionFolder = getDirectoryForRelease(currentVersion).Name;
-                    this.Log().Info("cleanDeadVersions: exclude folder {0}", currentVersionFolder);
+                    this.Log().Info("cleanDeadVersions: exclude current version folder {0}", currentVersionFolder);
+                }
+
+                string newVersionFolder = null;
+                if (newVersion != null) {
+                    newVersionFolder = getDirectoryForRelease(newVersion).Name;
+                    this.Log().Info("cleanDeadVersions: exclude new version folder {0}", newVersionFolder);
                 }
 
                 // NB: If we try to access a directory that has already been 
@@ -563,7 +563,7 @@ namespace Squirrel
                 // come from here.
                 var toCleanup = di.GetDirectories()
                     .Where(x => x.Name.ToLowerInvariant().Contains("app-"))
-                    .Where(x => x.Name != currentVersionFolder && x.Name != originalVersionFolder)
+                    .Where(x => x.Name != newVersionFolder && x.Name != currentVersionFolder)
                     .Where(x => !isAppFolderDead(x.FullName));
 
                 if (forceUninstall == false) {
@@ -580,7 +580,7 @@ namespace Squirrel
                                     try {
                                         await Utility.InvokeProcessAsync(exe, args, cts.Token);
                                     } catch (Exception ex) {
-                                        this.Log().Error(ex, "Coudln't run Squirrel hook, continuing: " + exe);
+                                        this.Log().ErrorException("Coudln't run Squirrel hook, continuing: " + exe, ex);
                                     }
                                 }
                             }, 1 /* at a time */);
@@ -591,7 +591,7 @@ namespace Squirrel
                 // Include dead folders in folders to :fire:
                 toCleanup = di.GetDirectories()
                     .Where(x => x.Name.ToLowerInvariant().Contains("app-"))
-                    .Where(x => x.Name != currentVersionFolder && x.Name != originalVersionFolder);
+                    .Where(x => x.Name != newVersionFolder && x.Name != currentVersionFolder);
 
                 // Get the current process list in an attempt to not burn 
                 // directories which have running processes
@@ -611,7 +611,7 @@ namespace Squirrel
                             markAppFolderAsDead(x.FullName);
                         }
                     } catch (UnauthorizedAccessException ex) {
-                        this.Log().Warn(ex, "Couldn't delete directory: " + x.FullName);
+                        this.Log().WarnException("Couldn't delete directory: " + x.FullName, ex);
 
                         // NB: Same deal as above
                         markAppFolderAsDead(x.FullName);
@@ -625,7 +625,7 @@ namespace Squirrel
                 var releaseEntry = default(ReleaseEntry);
 
                 foreach (var entry in entries) {
-                    if (entry.Version == currentVersion) {
+                    if (entry.Version == newVersion) {
                         releaseEntry = ReleaseEntry.GenerateFromFile(Path.Combine(pkgDir, entry.Filename));
                         continue;
                     }
