@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using Squirrel.SimpleSplat;
+using Splat;
 using Xunit;
 
 namespace Squirrel.Tests.Core

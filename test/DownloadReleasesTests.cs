@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Squirrel.SimpleSplat;
+using Splat;
 using Squirrel.Tests.TestHelpers;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace Squirrel.Tests
 {
     public class DownloadReleasesTests : IEnableLogger
     {
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public void ChecksumShouldFailIfFilesAreMissing()
         {
             Assert.False(true, "Rewrite this to be an integration test");
@@ -51,7 +51,7 @@ namespace Squirrel.Tests
             */
         }
 
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public void ChecksumShouldFailIfFilesAreBogus()
         {
             Assert.False(true, "Rewrite this to be an integration test");
@@ -91,7 +91,7 @@ namespace Squirrel.Tests
             */
         }
 
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public async Task DownloadReleasesFromHttpServerIntegrationTest()
         {
             Assert.False(true, "Rewrite this to not use the SampleUpdatingApp");
@@ -145,7 +145,7 @@ namespace Squirrel.Tests
             */
         }
 
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public async Task DownloadReleasesFromFileDirectoryIntegrationTest()
         {
             Assert.False(true, "Rewrite this to not use the SampleUpdatingApp");

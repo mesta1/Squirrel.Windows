@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mono.Options;
 using Octokit;
-using Squirrel.SimpleSplat;
+using Splat;
 using Squirrel;
 using Squirrel.Json;
 
@@ -35,8 +36,8 @@ namespace SyncReleases
 
         async Task<int> main(string[] args)
         {
-            using (var logger = new SetupLogLogger(false) { Level = Squirrel.SimpleSplat.LogLevel.Info }) {
-                Squirrel.SimpleSplat.Locator.CurrentMutable.Register(() => logger, typeof(Squirrel.SimpleSplat.ILogger));
+            using (var logger = new SetupLogLogger(false) { Level = Splat.LogLevel.Info }) {
+                Splat.Locator.CurrentMutable.Register(() => logger, typeof(Splat.ILogger));
 
                 var releaseDir = default(string);
                 var repoUrl = default(string);
@@ -89,11 +90,11 @@ namespace SyncReleases
         }
     }
 
-    class SetupLogLogger : Squirrel.SimpleSplat.ILogger, IDisposable
+    class SetupLogLogger : Splat.ILogger, IDisposable
     {
         StreamWriter inner;
         readonly object gate = 42;
-        public Squirrel.SimpleSplat.LogLevel Level { get; set; }
+        public Splat.LogLevel Level { get; set; }
 
         public SetupLogLogger(bool saveInTemp)
         {
@@ -107,7 +108,7 @@ namespace SyncReleases
             inner = new StreamWriter(file, false, Encoding.UTF8);
         }
 
-        public void Write(string message, LogLevel logLevel)
+        public void Write(string message, Splat.LogLevel logLevel)
         {
             if (logLevel < Level) {
                 return;
@@ -119,6 +120,21 @@ namespace SyncReleases
         public void Dispose()
         {
             lock(gate) inner.Dispose();
+        }
+
+        public void Write(Exception exception, [Localizable(false)] string message, LogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write([Localizable(false)] string message, [Localizable(false)] Type type, LogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write(Exception exception, [Localizable(false)] string message, [Localizable(false)] Type type, LogLevel logLevel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

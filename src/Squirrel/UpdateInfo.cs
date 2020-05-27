@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
-using Squirrel.SimpleSplat;
+using Splat;
 
 namespace Squirrel
 {
@@ -42,7 +42,7 @@ namespace Squirrel
                         var releaseNotes = x.GetReleaseNotes(PackageDirectory);
                         return EnumerableExtensions.Return(Tuple.Create(x, releaseNotes));
                     } catch (Exception ex) {
-                        this.Log().WarnException("Couldn't get release notes for:" + x.Filename, ex);
+                        this.Log().Warn(ex, "Couldn't get release notes for:" + x.Filename);
                         return Enumerable.Empty<Tuple<ReleaseEntry, string>>();
                     }
                 })

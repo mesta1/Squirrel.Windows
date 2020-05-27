@@ -34,10 +34,9 @@ The following code is added to MyApp `Program.cs` to cause the application to ch
 
 ~~~cs
 using Squirrel;
-using System.Threading.Tasks;
 ~~~
 
-**`static async Task Main()`**
+**`static void Main()`**
 
 ~~~cs
 using (var mgr = new UpdateManager("C:\\Projects\\MyApp\\Releases"))

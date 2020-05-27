@@ -25,7 +25,7 @@ BOOL CALLBACK EnumResNameProc(HMODULE hModule, LPCTSTR lpszType, LPTSTR lpszName
 	return true;
 }
 
-BOOL CALLBACK EnumResTypeProc(HMODULE hMod, LPTSTR lpszType, LONG_PTR lParam)
+BOOL CALLBACK EnumResTypeProc(HMODULE hMod, LPTSTR lpszType, LONG_PTR lParam) 
 {
 	std::vector<wchar_t*>* typeList = (std::vector<wchar_t*>*)lParam;
 	if (IS_INTRESOURCE(lpszType)) {
@@ -37,7 +37,7 @@ BOOL CALLBACK EnumResTypeProc(HMODULE hMod, LPTSTR lpszType, LONG_PTR lParam)
 	return true;
 }
 
-int CopyResourcesToStubExecutable(wchar_t* src, wchar_t* dest)
+int CopyResourcesToStubExecutable(wchar_t* src, wchar_t* dest) 
 {
 	HMODULE hSrc = LoadLibraryEx(src, NULL, LOAD_LIBRARY_AS_DATAFILE);
 	if (!hSrc) return GetLastError();
@@ -90,7 +90,7 @@ int wmain(int argc, wchar_t* argv[])
 	printf("Starting to read in Zip file!\n");
 	do {
 		if (!ReadFile(hFile, pCurrent, 0x1000, &dwBytesRead, NULL)) {
-			printf("Failed to read file! 0x%u\n", GetLastError());
+			printf("Failed to read file! 0x%p\n", GetLastError());
 			goto fail;
 		}
 
@@ -111,7 +111,7 @@ int wmain(int argc, wchar_t* argv[])
 
 	if (setFramework) {
 		if (!UpdateResource(hRes, L"FLAGS", (LPCWSTR)132, 0x0409, argv[4], (wcslen(argv[4])+1) * sizeof(wchar_t))) {
-			printf("Failed to update resource\n");
+			printf("Failed to update resouce\n");
 			goto fail;
 		}
 	}

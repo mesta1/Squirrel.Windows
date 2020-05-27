@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Squirrel.SimpleSplat;
+using Splat;
 using Squirrel;
 using Squirrel.Tests.TestHelpers;
 using Xunit;
@@ -22,7 +22,7 @@ namespace Squirrel.Tests.Core
                 Description = "It's Notepad",
             };
 
-            sl.SetAppUserModelId("org.anaïsbetts.test");
+            sl.SetAppUserModelId("org.paulbetts.test");
             var path = Path.GetFullPath(@".\test.lnk");
             sl.Save(path);
 

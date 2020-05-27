@@ -4,3 +4,4 @@ class MachineInstaller
 public:
 	static bool ShouldSilentInstall();
 };
+

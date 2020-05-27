@@ -9,7 +9,7 @@ namespace Squirrel.Tests
 {
     public class CheckForUpdateTests
     {
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public void NewReleasesShouldBeDetected()
         {
             Assert.False(true, "Rewrite this to be an integration test");
@@ -41,7 +41,7 @@ namespace Squirrel.Tests
             */
         }
 
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public void CorruptedReleaseFileMeansWeStartFromScratch()
         {
             Assert.False(true, "Rewrite this to be an integration test");
@@ -79,7 +79,7 @@ namespace Squirrel.Tests
             */
         }
 
-        [Fact(Skip = "Rewrite this to be an integration test")]
+        [Fact]
         public void CorruptRemoteFileShouldThrowOnCheck()
         {
             Assert.False(true, "Rewrite this to be an integration test");

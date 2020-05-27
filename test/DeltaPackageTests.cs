@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using NuGet;
+using Splat;
 using Squirrel;
-using Squirrel.SimpleSplat;
 using Squirrel.Tests.TestHelpers;
 using Xunit;
 
@@ -70,7 +70,7 @@ namespace Squirrel.Tests.Core
             }
         }
 
-        [Fact(Skip = "Rewrite this test, the original uses too many heavyweight fixtures")]
+        [Fact]
         public void ApplyMultipleDeltaPackagesGeneratesCorrectHash()
         {
             Assert.True(false, "Rewrite this test, the original uses too many heavyweight fixtures");

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet;
-using Squirrel.SimpleSplat;
+using Splat;
 using Squirrel;
 using Squirrel.Tests.TestHelpers;
 using Xunit;
@@ -482,7 +482,7 @@ namespace Squirrel.Tests
             fixture.unshimOurselves();
         }
 
-        [Fact(Skip = "This test is currently failing in CI")]
+        [Fact]
         public async Task GetShortcutsSmokeTest()
         {
             string remotePkgPath;

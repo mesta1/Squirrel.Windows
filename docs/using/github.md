@@ -44,10 +44,9 @@ To use GitHub release assets as your distribution mechanism you need to replace 
 
 ~~~cs
 using Squirrel;
-using System.Threading.Tasks;
 ~~~
 
-**`static async Task Main()`**
+**`static void Main()`**
 
 ~~~cs
 using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/myuser/myapp"))
