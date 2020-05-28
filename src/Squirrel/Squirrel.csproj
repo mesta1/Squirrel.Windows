@@ -63,9 +63,6 @@
     <Reference Include="SharpCompress, Version=0.17.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SharpCompress.0.17.1\lib\net45\SharpCompress.dll</HintPath>
     </Reference>
-    <Reference Include="Splat, Version=7.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Splat.7.2.1\lib\net461\Splat.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -102,6 +99,12 @@
     <Compile Include="ReleasePackage.cs" />
     <Compile Include="ShellFile.cs" />
     <Compile Include="SimpleJson\SimpleJson.cs" />
+    <Compile Include="SimpleSplat\AssemblyFinder.cs" />
+    <Compile Include="SimpleSplat\Logging.cs" />
+    <Compile Include="SimpleSplat\MemoizingMRUCache.cs" />
+    <Compile Include="SimpleSplat\ModeDetector.cs" />
+    <Compile Include="SimpleSplat\PlatformModeDetector.cs" />
+    <Compile Include="SimpleSplat\ServiceLocation.cs" />
     <Compile Include="SquirrelAwareApp.cs" />
     <Compile Include="SquirrelAwareExecutableDetector.cs" />
     <Compile Include="TaskbarHelper.cs" />

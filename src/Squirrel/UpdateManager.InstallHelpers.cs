@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using NuGet;
-using Splat;
+using Squirrel.SimpleSplat;
 using System.Reflection;
 
 namespace Squirrel
@@ -69,7 +69,7 @@ namespace Squirrel
                             }
                         }
                     } catch(Exception ex) {
-                        this.Log().Info(ex, "Couldn't write uninstall icon, don't care");
+                        this.Log().InfoException("Couldn't write uninstall icon, don't care", ex);
                     } finally {
                         File.Delete(targetPng);
                     }

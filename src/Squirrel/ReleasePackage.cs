@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using MarkdownSharp;
 using NuGet;
-using Splat;
+using Squirrel.SimpleSplat;
 using System.Threading.Tasks;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Readers;
@@ -230,7 +230,7 @@ namespace Squirrel
                             }, 5);
                         } catch (Exception e) {
                             if (!failureIsOkay) throw;
-                            LogHost.Default.Warn(e, "Can't write execution stub, probably in use");
+                            LogHost.Default.WarnException("Can't write execution stub, probably in use", e);
                         }
                     }
                 }

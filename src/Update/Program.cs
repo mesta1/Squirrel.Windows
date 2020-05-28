@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Mono.Options;
-using Splat;
+using Squirrel.SimpleSplat;
 using Squirrel.Json;
 using NuGet;
 using System.Text.RegularExpressions;
@@ -47,7 +47,7 @@ namespace Squirrel.Update
             bool isUninstalling = args.Any(x => x.Contains("uninstall"));
 
             using (var logger = new SetupLogLogger(isUninstalling) {Level = LogLevel.Info}) {
-                Locator.CurrentMutable.Register(() => logger, typeof (Splat.ILogger));
+                Locator.CurrentMutable.Register(() => logger, typeof (SimpleSplat.ILogger));
 
                 try {
                     return executeCommandLine(args);
@@ -855,11 +855,11 @@ namespace Squirrel.Update
         }
     }
 
-    class SetupLogLogger : Splat.ILogger, IDisposable
+    class SetupLogLogger : SimpleSplat.ILogger, IDisposable
     {
         TextWriter inner;
         readonly object gate = 42;
-        public Splat.LogLevel Level { get; set; }
+        public LogLevel Level { get; set; }
 
         public SetupLogLogger(bool saveInTemp)
         {

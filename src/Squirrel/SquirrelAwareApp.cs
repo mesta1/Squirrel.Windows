@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Splat;
+using Squirrel.SimpleSplat;
 
 namespace Squirrel
 {
@@ -70,7 +70,7 @@ namespace Squirrel
                 lookup[args[0]](version);
                 if (!ModeDetector.InUnitTestRunner()) Environment.Exit(0);
             } catch (Exception ex) {
-                LogHost.Default.Error(ex, "Failed to handle Squirrel events");
+                LogHost.Default.ErrorException("Failed to handle Squirrel events", ex);
                 if (!ModeDetector.InUnitTestRunner()) Environment.Exit(-1);
             }
         }

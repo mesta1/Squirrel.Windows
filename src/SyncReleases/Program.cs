@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Mono.Options;
+using Squirrel.SimpleSplat;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Mono.Options;
-using Octokit;
-using Splat;
-using Squirrel;
-using Squirrel.Json;
 
 namespace SyncReleases
 {
@@ -36,8 +29,8 @@ namespace SyncReleases
 
         async Task<int> main(string[] args)
         {
-            using (var logger = new SetupLogLogger(false) { Level = Splat.LogLevel.Info }) {
-                Splat.Locator.CurrentMutable.Register(() => logger, typeof(Splat.ILogger));
+            using (var logger = new SetupLogLogger(false) { Level = LogLevel.Info }) {
+                Locator.CurrentMutable.Register(() => logger, typeof(ILogger));
 
                 var releaseDir = default(string);
                 var repoUrl = default(string);
@@ -90,11 +83,11 @@ namespace SyncReleases
         }
     }
 
-    class SetupLogLogger : Splat.ILogger, IDisposable
+    class SetupLogLogger : ILogger, IDisposable
     {
         StreamWriter inner;
         readonly object gate = 42;
-        public Splat.LogLevel Level { get; set; }
+        public LogLevel Level { get; set; }
 
         public SetupLogLogger(bool saveInTemp)
         {
@@ -108,7 +101,7 @@ namespace SyncReleases
             inner = new StreamWriter(file, false, Encoding.UTF8);
         }
 
-        public void Write(string message, Splat.LogLevel logLevel)
+        public void Write(string message, LogLevel logLevel)
         {
             if (logLevel < Level) {
                 return;
